@@ -1,5 +1,6 @@
 {
   "version": "2.0.0",
+<<<<<<< HEAD
   "tasks": [
     {
       "label": "Validate Current File",
@@ -12,15 +13,46 @@
       "problemMatcher": []
     },
     {
+=======
+  "options": {
+    "cwd": "${workspaceFolder}",
+    "envFile": "${workspaceFolder}/.devspaces.env"
+  },
+  "tasks": [
+    {
+>>>>>>> f735f63 (code and workig devspaces stuff)
       "label": "Generate Code (prompt)",
       "type": "shell",
       "command": "bash",
       "args": [
         "-lc",
+<<<<<<< HEAD
         "scripts/generate.sh ${env:AGENT_ROUTE} ${env:GEN_LANG} ${workspaceFolder}/generated \"${input:genPrompt}\""
       ],
       "problemMatcher": []
     }
+=======
+        "set -a; [ -f .devspaces.env ] && . .devspaces.env; set +a; scripts-for-codegen/generate.sh \"$AGENT_ROUTE\" \"$GEN_LANG\" \"${input:genPrompt}\""
+      ],
+      "problemMatcher": []
+    },
+    {
+  "label": "Validate Current File (safe)",
+  "type": "shell",
+  "command": "bash",
+  "args": [
+    "-lc",
+    "set -a; [ -f .devspaces.env ] && . .devspaces.env; set +a; if [ -n \"$SEL\" ]; then printf '%s' \"$SEL\"; else cat \"${file}\"; fi | scripts-for-codegen/validate.sh \"$AGENT_ROUTE\" \"$VALIDATE_LANG\""
+  ],
+  "options": {
+    "env": {
+      "SEL": "${selectedText}"
+    }
+  },
+  "problemMatcher": []
+}
+
+>>>>>>> f735f63 (code and workig devspaces stuff)
   ],
   "inputs": [
     {
@@ -31,4 +63,7 @@
     }
   ]
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f735f63 (code and workig devspaces stuff)
