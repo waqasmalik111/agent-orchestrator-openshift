@@ -1,215 +1,497 @@
-# 🤖 AI Agent Code Generation Framework
+Agentic Orchestration - Cluster-Aware Code Generation & Telco Deployment
+Enterprise-grade AI agent for automated code generation, validation, and cluster-aware deployment on Red Hat OpenShift. Built specifically for Telco workloads with intelligent node selection, real-time cluster awareness, and Model-as-a-Service integration.
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-2.0%2B-green.svg)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![AI](https://img.shields.io/badge/AI-Powered-purple.svg)](https://mistral.ai/)
-[![ReAct](https://img.shields.io/badge/Pattern-ReAct-orange.svg)](https://react-lm.github.io/)
+ Overview
+This project implements an Enhanced ReAct Agent that combines AI-powered code generation with deep OpenShift cluster awareness to automate the complete development-to-deployment workflow for Telco applications.
+The Strategic Value
+Four Critical Capabilities in One Unified Platform:
+Code Generation - Not just snippets, but production-ready microservices from natural language
+Agentic AI - Intelligent system that plans, reasons, and makes autonomous decisions
+Telco Focus - Built specifically for telecom workloads, CNF/VNF deployments
+ Cluster Awareness - Agent understands your cluster state and makes intelligent deployment decisions
 
-> A sophisticated multi-agent orchestration framework featuring ReAct (Reasoning and Acting) agents for intelligent task automation and code generation. Built with Python, Flask, and integrated with Mistral AI for advanced language model capabilities.
+✨ Key Features
+ Cluster-Aware Deployment (T0 → T3 Timeline)
+The agent implements a sophisticated 4-stage deployment workflow:
+T0: Request Received
+Agent scans entire cluster status
+Analyzes node workloads (Worker-1: 18 pods, Worker-0: 23 pods, Worker-2: 25 pods)
+Identifies optimal deployment target
+T1: Node Selection
+Evaluation complete: System targets Worker-1 (lowest workload)
+Prepares node for deployment based on resource availability
+T2: Labeling
+Executes: oc label node worker-1 deployment=telco-app
+Node becomes discoverable for targeted deployment
+Label verified and ready
+T3: Deployment
+Kubernetes scheduler sees nodeSelector
+Pod successfully scheduled to Worker-1
+Application launched and accessible
+ AI-Powered Development
+Automated Boilerplate: Instantly scaffolds microservices, YAML configs, Dockerfiles
+Cluster Context: Generated code pre-configured for your specific OpenShift environment
+Model Choice: Best model for each task (Granite for Ansible, Llama for Python, Mistral for general)
+Privacy First: 100% on-premises inference - code never leaves your secure boundary
+ Secure On-Prem Validation
+Private & Compliant: All validation runs locally on OpenShift
+Syntax & Linting Verification: Automated code quality checks
+SAST: Static Application Security Testing
+Enterprise Compliance Rules: Custom rule enforcement
+DevSpaces Integration
+Native VS Code extension for seamless IDE experience
+Interactive prompts with keyboard shortcuts
+Real-time cluster dashboard
+Zero-configuration cloud development environments
 
-## 🌟 Features
-
-- **🧠 ReAct Agent Architecture**: Implements the Thought → Action → Observation pattern for intelligent decision-making
-- **🔧 Modular Tool System**: Extensible tool framework for agent capabilities
-- **🌐 RESTful API**: Full-featured Flask backend with CORS support
-- **🎨 Interactive Web UI**: Real-time visualization of agent reasoning process
-- **🤝 Multi-Agent Support**: Scalable architecture for multiple specialized agents
-- **🔌 LLM Integration**: Seamless integration with Mistral AI (OpenAI-compatible)
-- **📝 Todo Management**: Demonstration application showcasing agent capabilities
-
-## 📁 Project Structure
-
-```
-code-generation/
-├── 📱 app/                    # Flask application backend
-│   ├── app.py                # Main Flask server with API endpoints
-│   ├── requirements.txt      # Python dependencies
-│   └── todos.json            # Data persistence
+Project Structure
+agent-orchestrator-openshift/
+├── 📱 app/                              # Flask API Backend
+│   ├── app.py                          # Main REST API server (v3.0)
+│   ├── requirements.txt                # Python dependencies
+│   └── README.md                       # Backend documentation
 │
-├── 🤖 agents/                # AI agent implementations
-│   ├── react_agent.py        # ReAct agent with tool integration
-│   └── README.md            # Agent documentation
+├── 🤖 agents/                          # AI Agent Core
+│   ├── react_agent.py                  # Base ReAct agent
+│   ├── agent_enhanced/                 # Enhanced cluster-aware agent
+│   │   ├── enhanced_react_agent.py    # Main enhanced agent
+│   │   ├── openshift_tools.py         # Cluster interaction tools
+│   │   └── deployment_tool.py         # Deployment automation
+│   └── README.md                       # Agent documentation
 │
-├── 🧪 scripts-api-test/      # API testing utilities
-│   ├── mistral_api_test.py  # Mistral API integration tests
-│   └── README.md            # Testing documentation
+├── 🌐 devspaces-agent-extension/       # VS Code Extension
+│   ├── extension.js                    # Extension logic
+│   ├── package.json                    # Extension manifest
+│   └── devspaces-agent-extension.vsix  # Packaged extension
 │
-├── 🌐 index.html             # Interactive web interface
-└── 📖 README.md             # This file
-```
+├── 🧪 scripts-api-test/                # Testing & Validation
+│   ├── mistral_api_test.py            # Model API connectivity tests
+│   └── README.md                       # Test documentation
+│
+├── 🔧 scripts-for-codegen/             # Utility Scripts
+│   ├── generate.sh                     # Code generation script
+│   └── validate.sh                     # Validation script
+│
+├── 🐳 Containerfile                    # Container build definition
+├── 📦 deployment.yaml                  # OpenShift deployment manifest
+├── 🌍 index.html                       # Web dashboard UI
+└── 📖 README.md                        # This file
 
-## 🚀 Quick Start
+ Quick Start
+Prerequisites
+# Required
+✅ Python 3.9+
+✅ OpenShift 4.x cluster access
+✅ oc CLI tool installed and configured
+✅ Model-as-a-Service endpoint (Mistral/Granite/Llama)
 
-### Prerequisites
+# Optional but Recommended
+✨ Red Hat OpenShift AI
+✨ Red Hat DevSpaces
+✨ Git
+Installation
+1. Clone the Repository
+git clone https://github.com/your-org/agent-orchestrator-openshift.git
+cd agent-orchestrator-openshift
+2. Set Up Python Environment
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+3. Install Dependencies
+cd app
+pip install -r requirements.txt --break-system-packages
+4. Configure Environment
+cat > .env << EOF
+# Model-as-a-Service Configuration
+API_KEY=your_model_api_key
+MODEL_ENDPOINT=https://your-model-endpoint.com/v1
+MODEL_NAME=mistral-large-latest
 
-- Python 3.8 or higher
-- pip (Python package manager)
-- Mistral API access (optional, for LLM features)
+# Flask Configuration
+PORT=8080
+FLASK_ENV=production
 
-### Installation
+# OpenShift Configuration
+OC_NAMESPACE=telco-demo
+EOF
+5. Verify OpenShift Access
+oc whoami
+oc project telco-demo  # Create if needed: oc new-project telco-demo
+Running the Application
+Option 1: Local Development
+cd app
+python app.py
+Server starts at http://localhost:8080
+============================================================
+Enhanced AI Code Generation Agent API v3.0
+============================================================
+Starting server on port 8080
+Cluster-aware: Yes
+Node selection: Yes
+Auto-labeling: Yes
+Deployment capable: Yes
+============================================================
+Option 2: OpenShift Deployment
+# Deploy to OpenShift
+oc apply -f deployment.yaml
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/code-generation.git
-   cd code-generation
-   ```
+# Verify deployment
+oc get pods -l app=agent-orchestrator
 
-2. **Set up Python environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+# Get route
+oc get route agent-orchestrator
+Option 3: DevSpaces Extension
+# Install the VS Code extension
+code --install-extension devspaces-agent-extension/devspaces-agent-extension.vsix
 
-3. **Install dependencies**
-   ```bash
-   cd app
-   pip install -r requirements.txt
-   ```
+# Or in DevSpaces:
+# 1. Open Extensions panel (Ctrl+Shift+X)
+# 2. Click "..." → "Install from VSIX"
+# 3. Select devspaces-agent-extension-0.0.3.vsix
 
-4. **Configure environment variables**
-   ```bash
-   # Create .env file in the app directory
-   echo "API_KEY=your_mistral_api_key" > .env
-   echo "PORT=5000" >> .env
-   echo "TODOS_FILE=todos.json" >> .env
-   ```
+📚 API Documentation
+Core Endpoints
+Endpoint
+Method
+Description
+Cluster-Aware
+/health
+GET
+Health check and feature status
+✅
+/agent/execute
+POST
+Generate code from natural language
+✅
+/agent/validate
+POST
+Validate code quality and security
+✅
+/agent/cluster-overview
+GET
+Comprehensive cluster state
+✅
+/agent/nodes
+GET
+List all cluster nodes with metrics
+✅
+/agent/nodes/least-workload
+GET
+Find optimal deployment node
+✅
+/agent/nodes/label
+POST
+Label a specific node
+✅
+/agent/nodes/check-label
+GET
+Verify label existence
+✅
+/agent/deploy
+POST
+Full T0→T3 deployment workflow
+✅
+/agent/deployment-status/<app>
+GET
+Check deployment status
+✅
 
-### Running the Application
+Complete Deployment Workflow Example
+The /agent/deploy endpoint executes the entire T0→T3 timeline automatically:
+Request:
+curl -X POST http://localhost:8080/agent/deploy \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "real-time P2P messaging application",
+    "app_name": "telco-messenger",
+    "namespace": "telco-demo",
+    "node_label_key": "deployment",
+    "node_label_value": "telco-app"
+  }'
+Response:
+{
+  "success": true,
+  "cluster_overview": "CLUSTER OVERVIEW\n...\nNodes: 3 (1 master, 2 workers)\n  worker-0: 23 pods\n  worker-1: 18 pods ← SELECTED (least workload)\n  worker-2: 25 pods",
+  "node_selection": {
+    "requested": true,
+    "label": {"deployment": "telco-app"},
+    "nodes": ["worker-1"],
+    "status": "Label created",
+    "pod_count": 18
+  },
+  "generated_code": "from flask import Flask...",
+  "deployment_result": "DEPLOYMENT SUCCESSFUL\nPod: telco-messenger-xxxxx\nNode: worker-1\nStatus: Running",
+  "app_name": "telco-messenger",
+  "namespace": "telco-demo"
+}
 
-1. **Start the Flask server**
-   ```bash
-   cd app
-   python app.py
-   ```
-   The server will start on `http://localhost:5000`
-
-2. **Open the web interface**
-   - Navigate to `http://localhost:5000` in your browser
-   - The interactive UI will display with agent controls
-
-## 🎯 Key Components
-
-### 🤖 [ReAct Agent](agents/)
-The core intelligence system implementing reasoning and acting patterns:
-- **Thought Generation**: Analyzes tasks and plans actions
-- **Tool Execution**: Performs actions using available tools
-- **Observation Processing**: Interprets results and adjusts strategy
-- **Iterative Problem Solving**: Chains multiple steps to achieve goals
-
-### 🔧 [Flask API Backend](app/)
-RESTful API server providing:
-- Todo CRUD operations
-- Agent execution endpoints
-- WebSocket support for real-time updates
-- Data persistence layer
-
-### 🧪 [API Testing Suite](scripts-api-test/)
-Comprehensive testing utilities:
-- Mistral API connectivity tests
-- Model availability checks
-- Performance benchmarking tools
-
-## 📚 API Documentation
-
-### Core Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Serve web interface |
-| `/todos` | GET | List all todos |
-| `/todos` | POST | Create new todo |
-| `/todos/<id>` | GET | Get specific todo |
-| `/todos/<id>` | PUT | Update todo |
-| `/todos/<id>` | DELETE | Delete todo |
-| `/agent/execute` | POST | Execute ReAct agent |
-
-### Agent Execution Example
-
-```python
-# Execute agent via API
+Usage Scenarios
+Scenario 1: Generate Production Code
 import requests
 
-response = requests.post('http://localhost:5000/agent/execute', 
-    json={
-        "query": "Add a todo to buy groceries"
-    }
-)
+response = requests.post('http://localhost:8080/agent/execute', json={
+    "query": "Create a Flask API for Telco messaging with health check, send message, and get messages endpoints"
+})
+
+code = response.json()['answer']
+with open('app.py', 'w') as f:
+    f.write(code)
+Scenario 2: Validate Existing Code
+with open('my_code.py', 'r') as f:
+    code = f.read()
+
+response = requests.post('http://localhost:8080/agent/validate', json={
+    "code": code,
+    "language": "python"
+})
+
+report = response.json()['report']
+print(report)
+Scenario 3: Intelligent Cluster-Aware Deployment
+# This executes the complete T0→T3 timeline automatically
+response = requests.post('http://localhost:8080/agent/deploy', json={
+    "description": "5G messaging service with WebSocket support and real-time updates",
+    "app_name": "5g-messenger",
+    "namespace": "telco-demo",
+    "node_label_key": "deployment",
+    "node_label_value": "5g-app"
+})
 
 result = response.json()
-print(result['answer'])  # Agent's response
-print(result['history']) # Step-by-step reasoning
-```
 
-## 🛠️ Development
+print(f"✅ Deployment: {result['success']}")
+print(f"📍 Deployed to Node: {result['node_selection']['nodes'][0]}")
+print(f"📊 Node had {result['node_selection']['pod_count']} pods (lowest workload)")
+print(f"🏷️  Label Applied: {result['node_selection']['label']}")
 
-### Adding New Tools
+# Check deployment status
+status_response = requests.get(f"http://localhost:8080/agent/deployment-status/5g-messenger?namespace=telco-demo")
+print(f"🌐 Access URL: {status_response.json()['url']}")
 
-Create custom tools by extending the base `Tool` class:
+ Architecture Deep Dive
+The Agentic Workflow
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         USER REQUEST                                     │
+│              "Deploy a messaging app to OpenShift"                       │
+└────────────────────────────┬────────────────────────────────────────────┘
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │  DevSpaces UI    │
+                    │  (VS Code Ext)   │
+                    └────────┬─────────┘
+                              │
+                              ▼
+                    ┌──────────────────┐
+                    │  Flask API       │
+                    │  (REST Endpoint) │
+                    └────────┬─────────┘
+                              │
+                              ▼
+        ╔═══════════════════════════════════════════════════╗
+        ║        ENHANCED REACT AGENT (Brain)               ║
+        ║                                                   ║
+        ║  ┌──────────────────────────────────────────┐   ║
+        ║  │ Intent Handler & Planner                 │   ║
+        ║  │ • Analyze request                        │   ║
+        ║  │ • Plan multi-step workflow               │   ║
+        ║  │ • Coordinate tool calls                  │   ║
+        ║  └──────────────┬───────────────────────────┘   ║
+        ║                  │                               ║
+        ║                  ▼                               ║
+        ║   ┌──────────────────────────────────────────┐  ║
+        ║   │         Tool Orchestration                │  ║
+        ║   │                                           │  ║
+        ║   │  ┌──────────────┐  ┌──────────────┐     │  ║
+        ║   │  │ Code Gen     │  │ Code         │     │  ║
+        ║   │  │ Handler      │  │ Validation   │     │  ║
+        ║   │  └──────────────┘  └──────────────┘     │  ║
+        ║   │                                           │  ║
+        ║   │  ┌──────────────┐  ┌──────────────┐     │  ║
+        ║   │  │ OCP API      │  │ Deployment   │     │  ║
+        ║   │  │ Handler      │  │ Handler      │     │  ║
+        ║   │  └──────────────┘  └──────────────┘     │  ║
+        ║   │                                           │  ║
+        ║   │  ┌──────────────┐                        │  ║
+        ║   │  │ GitOps       │                        │  ║
+        ║   │  │ Handler      │                        │  ║
+        ║   │  └──────────────┘                        │  ║
+        ║   └──────────────┬───────────────────────────┘  ║
+        ║                  │                               ║
+        ╚══════════════════╪═══════════════════════════════╝
+                            │
+          ┌─────────────────┼─────────────────┐
+          │                 │                 │
+          ▼                 ▼                 ▼
+  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+  │ Model-as-a-  │  │  OpenShift   │  │  Deployed    │
+  │  Service     │  │  Cluster     │  │  Telco App   │
+  │              │  │              │  │              │
+  │ • Mistral    │  │ • Nodes      │  │ • Running    │
+  │ • Granite    │  │ • Pods       │  │ • Accessible │
+  │ • Llama      │  │ • Routes     │  │ • Monitored  │
+  └──────────────┘  └──────────────┘  └──────────────┘
+ReAct Pattern in Action
+The agent uses Reasoning and Acting (ReAct) to solve complex tasks:
+Iteration 1: Understanding
+Thought: "User wants to deploy a messaging app. I need cluster state first."
+Action: Call OpenShiftClusterInfoTool.get_cluster_overview()
+Observation: "3 nodes, worker-1 has 18 pods (least busy)"
+Iteration 2: Planning
+Thought: "No label 'deployment=telco-app' exists. Need to create it."
+Action: Call OpenShiftNodeTool.label_node(worker-1, deployment, telco-app)
+Observation: "Label created successfully"
+Iteration 3: Code Generation
+Thought: "Need Flask app code for messaging with WebSockets"
+Action: Call CodeGenTool.generate(prompt)
+Observation: "Generated 450 lines of production code"
+Iteration 4: Deployment
+Thought: "Code ready, node labeled, can deploy now"
+Action: Call OpenShiftDeploymentTool.execute(code, app_name, namespace, node_selector)
+Observation: "Deployment successful, pod running on worker-1"
 
-```python
-from agents.react_agent import Tool
+Advanced Configuration
+Model-as-a-Service Setup
+Configure multiple LLM backends for different tasks:
+# .env configuration
+MODEL_ENDPOINT_MISTRAL=https://mistral-endpoint.com/v1
+MODEL_ENDPOINT_GRANITE=https://granite-endpoint.com/v1
+MODEL_ENDPOINT_LLAMA=https://llama-endpoint.com/v1
 
-class CustomTool(Tool):
-    def __init__(self):
-        super().__init__(
-            name="custom_tool",
-            description="Description of what the tool does"
-        )
-    
-    def execute(self, input_data):
-        # Tool implementation
-        return "Tool result"
-```
+# Default model
+MODEL_NAME=mistral-large-latest
 
-### Extending the Agent
+# Task-specific models
+MODEL_ANSIBLE=granite-20b-code
+MODEL_PYTHON=llama-3-70b-instruct
+Custom Deployment Templates
+Create custom deployment templates in agents/agent_enhanced/deployment_tool.py:
+TELCO_DEPLOYMENT_TEMPLATE = """
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {app_name}
+  namespace: {namespace}
+  labels:
+    app: {app_name}
+    telco-workload: "true"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {app_name}
+  template:
+    metadata:
+      labels:
+        app: {app_name}
+    spec:
+      nodeSelector:
+        {node_selector}
+      containers:
+      - name: {app_name}
+        image: {image}
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+"""
 
-The ReAct agent can be customized with:
-- Custom reasoning prompts
-- Additional tool integrations
-- Modified observation processing
-- Alternative LLM backends
+Testing & Validation
+Run API Tests
+cd scripts-api-test
+python mistral_api_test.py
 
-## 🔐 Environment Variables
+# Output:
+# ✅ Model API: Connected
+# ✅ Code Generation: Working
+# ✅ Response Time: 1.2s
+Validate Generated Code
+cd scripts-for-codegen
+./validate.sh path/to/generated_code.py
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `API_KEY` | Mistral API key | None |
-| `PORT` | Flask server port | 5000 |
-| `TODOS_FILE` | Todo storage file | todos.json |
-| `FLASK_DEBUG` | Debug mode | True |
+# Runs:
+# • Syntax check (pylint)
+# • Security scan (bandit)
+# • Complexity analysis
+# • Dependency check
+Integration Tests
+pytest tests/ -v
 
-## 🤝 Contributing
+# Tests:
+# test_cluster_awareness.py::test_node_selection ✅
+# test_deployment.py::test_full_workflow ✅
+# test_code_generation.py::test_flask_generation ✅
 
-We welcome contributions! Please follow these steps:
+Monitoring & Observability
+Health Check
+curl http://localhost:8080/health
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+{
+  "status": "healthy",
+  "agent": "ready",
+  "cluster_aware": true,
+  "features": [
+    "cluster_overview",
+    "node_selection",
+    "auto_labeling",
+    "intelligent_deployment"
+  ]
+}
+Deployment Metrics
+# Check agent performance
+oc logs deployment/agent-orchestrator | grep "DEPLOYMENT SUCCESSFUL"
 
-## 📄 License
+# Monitor cluster decisions
+oc logs deployment/agent-orchestrator | grep "Node Selection"
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+ Contributing
+We welcome contributions! Here's how to get started:
+Development Setup
+# Clone and setup
+git clone https://github.com/your-org/agent-orchestrator-openshift.git
+cd agent-orchestrator-openshift
+python3 -m venv venv
+source venv/bin/activate
 
-## 🙏 Acknowledgments
+# Install dev dependencies
+pip install -r requirements-dev.txt
 
-- [Mistral AI](https://mistral.ai/) for LLM capabilities
-- [ReAct Paper](https://react-lm.github.io/) for the agent architecture pattern
-- Flask community for the excellent web framework
-- Contributors and maintainers
+# Run linters
+flake8 app/ agents/
+black --check app/ agents/
 
-## 🔗 Links
+# Run tests
+pytest tests/ -v --cov=app --cov=agents
+Contribution Guidelines
+Fork the repository
+Create a feature branch: git checkout -b feature/amazing-feature
+Make changes with clear commit messages
+Add tests for new functionality
+Ensure all tests pass: pytest
+Update documentation if needed
+Submit a pull request
 
-- [**Agent Documentation**](agents/) - Detailed agent implementation guide
-- [**API Backend**](app/) - Flask application documentation
-- [**Testing Suite**](scripts-api-test/) - API testing documentation
-- [**Issues**](https://github.com/yourusername/code-generation/issues) - Report bugs or request features
-- [**Discussions**](https://github.com/yourusername/code-generation/discussions) - Community discussions
+ License
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+ Security & Compliance
+Security Features
+✅ 100% air-gapped operation (no external data transfer)
+✅ Built-in SAST scanning before deployment
+✅ OpenShift RBAC integration
+✅ Secrets managed via OpenShift Secrets
+✅ Network policies enforced
+✅ Container image vulnerability scanning
 
----
 
-<p align="center">
-Built with ❤️ by the AI Agent Development Team
-</p>
+ Acknowledgments
+Red Hat OpenShift - Enterprise Kubernetes platform
+Red Hat OpenShift AI - AI/ML platform
+Mistral AI - LLM capabilities
+ReAct Paper - Agent architecture inspiration
+Flask - Python web framework
+Telco Engineering Teams - Use case validation and feedback
+Red Hat Demo Platform - Fast environment provisioning
+
+
